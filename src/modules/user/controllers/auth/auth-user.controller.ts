@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { reply } from '../../../../infrastructure/utils/reply';
 import { useCatch } from '../../../../infrastructure/utils/use-catch';
-import { CreateRegisterUserService } from '../../services/mutations/create-register-user.service';
+import { CreateRegisterUser } from '../../services/use-cases';
 
 import { CreateLoginUser } from '../../services/use-cases/create-login-user';
 import { CreateOrUpdateResetPasswordDto } from '../../../reset-password/dto/validation-reset-password.dto';
@@ -25,7 +25,7 @@ import {
 @Controller()
 export class AuthUserController {
   constructor(
-    private readonly createRegisterUserService: CreateRegisterUserService,
+    private readonly createRegisterUser: CreateRegisterUser,
     private readonly createLoginUser: CreateLoginUser,
     private readonly resetUpdatePasswordUserService: ResetUpdatePasswordUserService,
   ) {}
@@ -37,7 +37,7 @@ export class AuthUserController {
     @Body() createRegisterUserDto: CreateRegisterUserDto,
   ) {
     const [errors, results] = await useCatch(
-      this.createRegisterUserService.createOneRegister({
+      this.createRegisterUser.createOneRegister({
         ...createRegisterUserDto,
       }),
     );

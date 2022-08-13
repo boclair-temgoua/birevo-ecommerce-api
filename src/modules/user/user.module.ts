@@ -6,11 +6,10 @@ import { User } from '../../models/User';
 import { FindUserService } from './services/query/find-user.service';
 import { CreateOrUpdateUserService } from './services/mutations/create-or-update-user.service';
 import { AuthUserController } from './controllers/auth/auth-user.controller';
-import { CreateRegisterUserService } from './services/mutations/create-register-user.service';
 import { Profile } from '../../models/Profile';
 import { Organization } from '../../models/Organization';
 import { CreateOrUpdateOrganizationService } from '../organization/services/mutations/create-or-update-organization.service';
-import { CreateLoginUser } from './services/use-cases';
+import { CreateLoginUser, CreateRegisterUser } from './services/use-cases';
 import { CreateOrUpdateResetPasswordService } from '../reset-password/services/mutations/create-or-update-reset-password.service';
 import { ResetPassword } from '../../models/ResetPassword';
 import { FindOneResetPasswordByService } from '../reset-password/services/query/find-one-reset-password-by.service';
@@ -48,7 +47,7 @@ import { ApplicationToken } from '../../models/ApplicationToken';
     /** Imports providers mutations */
     CreateLoginUser,
     CheckUserService,
-    CreateRegisterUserService,
+    CreateRegisterUser,
     CreateOrUpdateUserService,
     CreateOrUpdateProfileService,
     CreateOrUpdateResetPasswordService,

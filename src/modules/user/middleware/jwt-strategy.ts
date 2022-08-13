@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { useCatch } from 'src/infrastructure/utils/use-catch';
 import { FindOneUserByService } from '../services/query/find-one-user-by.service';
+import { User } from '../../../models/User';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -19,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload): Promise<any> {
+  async validate(payload): Promise<User> {
     const [_error, user] = await useCatch(
       this.findOneUserByService.findOneBy({ option1: { userId: payload?.id } }),
     );

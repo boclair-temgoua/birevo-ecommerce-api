@@ -1,5 +1,5 @@
 import { FindOneUserByService } from '../query/find-one-user-by.service';
-import { CreateOrUpdateUserService } from './create-or-update-user.service';
+import { CreateOrUpdateUserService } from '../mutations/create-or-update-user.service';
 import { CreateOrUpdateProfileService } from '../../../profile/services/mutations/create-or-update-profile.service';
 import {
   Injectable,
@@ -7,12 +7,15 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import * as amqplib from 'amqplib';
 import { CreateRegisterUserDto } from '../../dto/validation-user.dto';
 import { useCatch } from 'src/infrastructure/utils/use-catch';
 import { CreateOrUpdateOrganizationService } from '../../../organization/services/mutations/create-or-update-organization.service';
+import { configurations } from '../../../../infrastructure/configurations';
+import { authRegisterJob } from '../../jobs/auth-login-and-register-job';
 
 @Injectable()
-export class CreateRegisterUserService {
+export class CreateRegisterUser {
   constructor(
     private readonly findOneUserByService: FindOneUserByService,
     private readonly createOrUpdateUserService: CreateOrUpdateUserService,
@@ -80,6 +83,15 @@ export class CreateRegisterUserService {
     if (__errorOr) {
       throw new NotFoundException(__errorOr);
     }
+
+    const queue = 'user-register';
+    const connect = await amqplib.connect(
+      configurations.implementations.amqp.link,
+    );
+    const channel = await connect.createChannel();
+    await channel.assertQueue(queue, { durable: false });
+    await channel.sendToQueue(queue, Buffer.from(JSON.stringify(saveItem)));
+    await authRegisterJob({ channel, queue });
 
     return saveItem;
   }

@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { useCatch } from '../../../../infrastructure/utils/use-catch';
 import { generateUUID } from '../../../../infrastructure/utils/commons';
 import { User } from '../../../../models/User';
+import { generateLongUUID } from '../../../../infrastructure/utils/commons/generate-long-uuid';
 import {
   CreateUserOptions,
   UpdateUserOptions,
@@ -32,6 +33,7 @@ export class CreateOrUpdateUserService {
 
     const user = new User();
     user.uuid = generateUUID();
+    user.token = generateLongUUID(50);
     user.email = email;
     user.hashPassword(password);
     user.username = username;
