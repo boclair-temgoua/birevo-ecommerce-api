@@ -11,7 +11,7 @@ import { FindOneUserByService } from '../services/query/find-one-user-by.service
 import { User } from '../../../models/User';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtAuthStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly findOneUserByService: FindOneUserByService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -27,10 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (_error) {
       throw new NotFoundException(_error);
     }
-    if (!user)
-      throw new UnauthorizedException(
-        'Invalid token or expired please try later',
-      );
+    if (!user) throw new UnauthorizedException('User invalid');
     return user;
   }
 }

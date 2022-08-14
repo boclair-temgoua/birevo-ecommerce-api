@@ -35,9 +35,7 @@ export class AuthTokenMiddleware implements NestMiddleware {
       throw new NotFoundException(_error);
     }
     if (!applicationToken)
-      throw new UnauthorizedException(
-        'Invalid token or expired please try later',
-      );
+      throw new UnauthorizedException('Application token invalid');
 
     /** Find user to database */
     const [_errorU, user] = await useCatch(
