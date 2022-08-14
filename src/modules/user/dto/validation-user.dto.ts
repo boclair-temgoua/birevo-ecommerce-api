@@ -21,7 +21,7 @@ export class UpdateInfoUserDto {
   organizationInUtilizationId: number;
 }
 
-export class TokenResetPasswordUserDto {
+export class TokenUserDto {
   @IsNotEmpty()
   @MinLength(6)
   @IsString()

@@ -1,8 +1,6 @@
 import {
   UnauthorizedException,
   NotFoundException,
-  HttpException,
-  HttpStatus,
   NestMiddleware,
   Injectable,
 } from '@nestjs/common';

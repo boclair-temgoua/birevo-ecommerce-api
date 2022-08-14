@@ -64,6 +64,7 @@ export class CreateOrUpdateUserService {
       refreshToken,
       organizationInUtilizationId,
       deletedAt,
+      confirmedAt,
     } = {
       ...options,
     };
@@ -99,6 +100,7 @@ export class CreateOrUpdateUserService {
     findItem.refreshToken = refreshToken;
     findItem.organizationInUtilizationId = organizationInUtilizationId;
     findItem.deletedAt = deletedAt;
+    findItem.confirmedAt = confirmedAt;
 
     const query = this.driver.save(findItem);
     const [errorUp, result] = await useCatch(query);

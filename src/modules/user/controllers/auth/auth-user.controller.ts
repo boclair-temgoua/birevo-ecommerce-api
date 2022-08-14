@@ -7,6 +7,8 @@ import {
   Param,
   Ip,
   Res,
+  Query,
+  Get,
 } from '@nestjs/common';
 import { reply } from '../../../../infrastructure/utils/reply';
 import { useCatch } from '../../../../infrastructure/utils/use-catch';
@@ -19,14 +21,16 @@ import {
   CreateRegisterUserDto,
   CreateLoginUserDto,
   UpdateResetPasswordUserDto,
-  TokenResetPasswordUserDto,
+  TokenUserDto,
 } from '../../dto/validation-user.dto';
+import { ConfirmAccountTokenUser } from '../../services/use-cases/confirm-account-token-user';
 
 @Controller()
 export class AuthUserController {
   constructor(
     private readonly createRegisterUser: CreateRegisterUser,
     private readonly createLoginUser: CreateLoginUser,
+    private readonly confirmAccountTokenUser: ConfirmAccountTokenUser,
     private readonly resetUpdatePasswordUserService: ResetUpdatePasswordUserService,
   ) {}
 
@@ -37,7 +41,7 @@ export class AuthUserController {
     @Body() createRegisterUserDto: CreateRegisterUserDto,
   ) {
     const [errors, results] = await useCatch(
-      this.createRegisterUser.createOneRegister({
+      this.createRegisterUser.execute({
         ...createRegisterUserDto,
       }),
     );
@@ -55,7 +59,7 @@ export class AuthUserController {
     @Body() createLoginUserDto: CreateLoginUserDto,
   ) {
     const [errors, results] = await useCatch(
-      this.createLoginUser.createOneLogin({ ...createLoginUserDto, ip }),
+      this.createLoginUser.execute({ ...createLoginUserDto, ip }),
     );
     if (errors) {
       throw new NotFoundException(errors);
@@ -85,12 +89,26 @@ export class AuthUserController {
   async updateOneResetPassword(
     @Res() res,
     @Body() updateResetPasswordUserDto: UpdateResetPasswordUserDto,
-    @Param() tokenResetPasswordUserDto: TokenResetPasswordUserDto,
+    @Param() tokenUserDto: TokenUserDto,
   ) {
     const [errors, results] = await useCatch(
       this.resetUpdatePasswordUserService.updateOneResetPassword({
         ...updateResetPasswordUserDto,
-        ...tokenResetPasswordUserDto,
+        ...tokenUserDto,
+      }),
+    );
+    if (errors) {
+      throw new NotFoundException(errors);
+    }
+    return reply({ res, results });
+  }
+
+  /** Confirm account*/
+  @Get(`/confirm-account`)
+  async confirmAccount(@Res() res, @Query() tokenUserDto: TokenUserDto) {
+    const [errors, results] = await useCatch(
+      this.confirmAccountTokenUser.execute({
+        ...tokenUserDto,
       }),
     );
     if (errors) {

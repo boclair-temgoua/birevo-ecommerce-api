@@ -22,7 +22,7 @@ export class CreateLoginUser {
   ) {}
 
   /** Create one login to the database. */
-  async createOneLogin(options: CreateLoginUserDto): Promise<any> {
+  async execute(options: CreateLoginUserDto): Promise<any> {
     const { email, password, ip } = { ...options };
 
     const [_error, user] = await useCatch(

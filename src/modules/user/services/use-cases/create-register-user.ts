@@ -24,7 +24,7 @@ export class CreateRegisterUser {
   ) {}
 
   /** Create one register to the database. */
-  async createOneRegister(options: CreateRegisterUserDto): Promise<any> {
+  async execute(options: CreateRegisterUserDto): Promise<any> {
     const { email, password, lastName, firstName } = { ...options };
 
     const [_error, user] = await useCatch(

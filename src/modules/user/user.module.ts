@@ -9,7 +9,11 @@ import { AuthUserController } from './controllers/auth/auth-user.controller';
 import { Profile } from '../../models/Profile';
 import { Organization } from '../../models/Organization';
 import { CreateOrUpdateOrganizationService } from '../organization/services/mutations/create-or-update-organization.service';
-import { CreateLoginUser, CreateRegisterUser } from './services/use-cases';
+import {
+  CreateLoginUser,
+  CreateRegisterUser,
+  ConfirmAccountTokenUser,
+} from './services/use-cases';
 import { CreateOrUpdateResetPasswordService } from '../reset-password/services/mutations/create-or-update-reset-password.service';
 import { ResetPassword } from '../../models/ResetPassword';
 import { FindOneResetPasswordByService } from '../reset-password/services/query/find-one-reset-password-by.service';
@@ -45,17 +49,18 @@ import { ApplicationToken } from '../../models/ApplicationToken';
     FindOneApplicationTokenByService,
 
     /** Imports providers mutations */
-    CreateLoginUser,
     CheckUserService,
-    CreateRegisterUser,
     CreateOrUpdateUserService,
     CreateOrUpdateProfileService,
     CreateOrUpdateResetPasswordService,
     CreateOrUpdateOrganizationService,
-
-    /** Imports providers use-cases */
     FindOneResetPasswordByService,
     ResetUpdatePasswordUserService,
+
+    /** Imports providers use-cases */
+    CreateLoginUser,
+    CreateRegisterUser,
+    ConfirmAccountTokenUser,
   ],
 })
 export class UserModule {}

@@ -27,6 +27,9 @@ export class User extends BaseDeleteEntity {
   })
   uuid?: string;
 
+  @Column({ type: 'timestamptz', nullable: true })
+  confirmedAt?: Date;
+
   @Column({ unique: true, nullable: true })
   email?: string;
 
