@@ -9,6 +9,8 @@ import {
   Res,
   Query,
   Get,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { reply } from '../../../../infrastructure/utils/reply';
 import { useCatch } from '../../../../infrastructure/utils/use-catch';
@@ -24,12 +26,16 @@ import {
   TokenUserDto,
 } from '../../dto/validation-user.dto';
 import { ConfirmAccountTokenUser } from '../../services/use-cases/confirm-account-token-user';
+import { ChangePasswordUser } from '../../services/use-cases/change-password-user';
+import { JwtAuthGuard } from '../../middleware/jwt-auth.guard';
+import { UpdateChangePasswordUserDto } from '../../dto/validation-user.dto';
 
 @Controller()
 export class AuthUserController {
   constructor(
     private readonly createRegisterUser: CreateRegisterUser,
     private readonly createLoginUser: CreateLoginUser,
+    private readonly changePasswordUser: ChangePasswordUser,
     private readonly confirmAccountTokenUser: ConfirmAccountTokenUser,
     private readonly resetUpdatePasswordUserService: ResetUpdatePasswordUserService,
   ) {}
@@ -107,8 +113,28 @@ export class AuthUserController {
   @Get(`/confirm-account`)
   async confirmAccount(@Res() res, @Query() tokenUserDto: TokenUserDto) {
     const [errors, results] = await useCatch(
-      this.confirmAccountTokenUser.execute({
-        ...tokenUserDto,
+      this.confirmAccountTokenUser.execute({ ...tokenUserDto }),
+    );
+    if (errors) {
+      throw new NotFoundException(errors);
+    }
+    return reply({ res, results });
+  }
+
+  /** Change password account*/
+  @Put(`/change-password`)
+  @UseGuards(JwtAuthGuard)
+  async changePassword(
+    @Res() res,
+    @Req() req,
+    @Body() updateChangePasswordUserDto: UpdateChangePasswordUserDto,
+  ) {
+    const { user } = req;
+    const userId = req?.user?.id;
+    const [errors, results] = await useCatch(
+      this.changePasswordUser.execute({
+        ...updateChangePasswordUserDto,
+        userId,
       }),
     );
     if (errors) {

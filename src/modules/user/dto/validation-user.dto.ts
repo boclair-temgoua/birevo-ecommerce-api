@@ -40,6 +40,26 @@ export class UpdateResetPasswordUserDto {
   passwordConfirm: string;
 }
 
+export class UpdateChangePasswordUserDto {
+  @IsNotEmpty()
+  @MinLength(8)
+  @IsString()
+  password: string;
+
+  @IsString()
+  @MinLength(8)
+  newPassword: string;
+
+  @IsString()
+  @MinLength(8)
+  @Match('newPassword')
+  passwordConfirm: string;
+
+  @IsOptional()
+  @IsInt()
+  userId: number;
+}
+
 export class CreateLoginUserDto {
   @IsNotEmpty()
   @IsString()

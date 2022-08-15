@@ -26,6 +26,10 @@ import { JwtAuthStrategy } from './middleware/jwt-auth.strategy';
 import { FindOneApplicationTokenByService } from '../application-token/services/query/find-one-application-token-by.service';
 import { ApplicationToken } from '../../models/ApplicationToken';
 // import { LocalStrategy } from './services/middleware/auth-token-middleware';
+import { ChangePasswordUser } from './services/use-cases/change-password-user';
+import { UpdateOrganizationToUser } from './services/use-cases/update-organization-to-user';
+import { CreateOrUpdateSubscribeService } from '../subscribe/services/mutations/create-or-update-subscribe.service';
+import { Subscribe } from '../../models/Subscribe';
 
 @Module({
   imports: [
@@ -33,6 +37,7 @@ import { ApplicationToken } from '../../models/ApplicationToken';
     TypeOrmModule.forFeature([Profile]),
     TypeOrmModule.forFeature([Organization]),
     TypeOrmModule.forFeature([ResetPassword]),
+    TypeOrmModule.forFeature([Subscribe]),
     TypeOrmModule.forFeature([ApplicationToken]),
   ],
   controllers: [
@@ -56,11 +61,14 @@ import { ApplicationToken } from '../../models/ApplicationToken';
     CreateOrUpdateOrganizationService,
     FindOneResetPasswordByService,
     ResetUpdatePasswordUserService,
+    CreateOrUpdateSubscribeService,
 
     /** Imports providers use-cases */
     CreateLoginUser,
+    ChangePasswordUser,
     CreateRegisterUser,
     ConfirmAccountTokenUser,
+    UpdateOrganizationToUser,
   ],
 })
 export class UserModule {}

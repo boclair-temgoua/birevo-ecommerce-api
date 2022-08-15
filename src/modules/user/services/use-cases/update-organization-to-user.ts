@@ -14,7 +14,7 @@ import { configurations } from '../../../../infrastructure/configurations';
 import { UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
-export class ConfirmAccountTokenUser {
+export class UpdateOrganizationToUser {
   constructor(
     private readonly findOneUserByService: FindOneUserByService,
     private readonly createOrUpdateUserService: CreateOrUpdateUserService,
@@ -33,15 +33,15 @@ export class ConfirmAccountTokenUser {
     if (!user) throw new UnauthorizedException();
 
     /** Update user */
-    const [errorU, updateItem] = await useCatch(
-      this.createOrUpdateUserService.updateOne(
-        { option1: { userId: user?.id } },
-        { token, confirmedAt: new Date() },
-      ),
-    );
-    if (errorU) {
-      throw new NotFoundException(errorU);
-    }
+    // const [errorU, updateItem] = await useCatch(
+    //   this.createOrUpdateUserService.updateOne(
+    //     { option1: { userId: user?.id } },
+    //     { token, confirmedAt: new Date() },
+    //   ),
+    // );
+    // if (errorU) {
+    //   throw new NotFoundException(errorU);
+    // }
 
     return { id: user?.id, uuid: user?.uuid, confirmedAt: user?.confirmedAt };
   }
