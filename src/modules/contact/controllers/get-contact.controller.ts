@@ -23,7 +23,7 @@ export class GetContactController {
     private readonly httpService: HttpService,
   ) {}
 
-  @Get(`/`)
+  @Get(`/welcome`)
   async getLandingPage(@Response() res: any) {
     return reply({
       res,

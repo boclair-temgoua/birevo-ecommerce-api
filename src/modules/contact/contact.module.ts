@@ -40,9 +40,4 @@ import { HttpModule } from '@nestjs/axios';
     FindOneUserByService,
   ],
 })
-export class ContactModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthTokenMiddleware).forRoutes(GetOneContactController);
-  }
-}
-// export class ContactModule {}
+export class ContactModule {}
