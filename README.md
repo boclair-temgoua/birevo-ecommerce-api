@@ -36,6 +36,14 @@ $ npm install
 
 ```bash
 # development
+$ start:dev
+
+```
+
+## Running the app with docker
+
+```bash
+# development
 $ docker:dev:rebuild
 
 # production mode
